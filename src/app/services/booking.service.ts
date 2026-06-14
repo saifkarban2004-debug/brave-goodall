@@ -4,6 +4,7 @@ import {
   collection,
   addDoc,
   updateDoc,
+  deleteDoc,
   doc,
   query,
   orderBy,
@@ -96,5 +97,14 @@ export class BookingService {
   updateBookingStatus(docId: string, newStatus: BookingStatus): Promise<void> {
     const docRef = doc(this.firestore, 'bookings', docId);
     return updateDoc(docRef, { status: newStatus });
+  }
+
+  // ── 4. DELETE ─────────────────────────────────────────────────────────────
+  /**
+   * Permanently delete a booking document from Firestore.
+   */
+  deleteBooking(docId: string): Promise<void> {
+    const docRef = doc(this.firestore, 'bookings', docId);
+    return deleteDoc(docRef);
   }
 }

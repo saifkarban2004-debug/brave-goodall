@@ -31,6 +31,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   // Track which row just had its message copied (shows 'Copied! ✅' for 2s)
   copiedId: string | null = null;
 
+  // Delete confirmation state
+  pendingDeleteBooking: Booking | null = null;   // non-null = modal is open
+  deletingId: string | null = null;              // non-null = delete in progress
+
   // Available status options shown in each dropdown
   readonly statusOptions: { value: BookingStatus; label: string }[] = [
     { value: 'pending',   label: '⏳ Pending'   },
@@ -97,6 +101,36 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   trackById(_: number, b: Booking): string { return b.id; }
 
   logout(): void { this.authService.logout(); }
+
+  // ── Delete with confirmation ──────────────────────────────────────────────
+  confirmDelete(booking: Booking): void {
+    this.pendingDeleteBooking = booking;   // opens the modal
+  }
+
+  cancelDelete(): void {
+    this.pendingDeleteBooking = null;      // closes the modal
+  }
+
+  executeDelete(): void {
+    if (!this.pendingDeleteBooking) return;
+
+    const booking = this.pendingDeleteBooking;
+    this.deletingId = booking.id;
+
+    this.bookingService.deleteBooking(booking.id)
+      .then(() => {
+        console.log(`Booking ${booking.id} deleted.`);
+        this.pendingDeleteBooking = null;
+      })
+      .catch((err) => {
+        console.error('Delete failed:', err);
+        this.errorMessage = `Failed to delete booking: ${err.message}`;
+        this.pendingDeleteBooking = null;
+      })
+      .finally(() => {
+        this.deletingId = null;
+      });
+  }
 
   // ── WhatsApp click-to-chat ─────────────────────────────────────────────────
   copyConfirmationMessage(booking: Booking): void {
