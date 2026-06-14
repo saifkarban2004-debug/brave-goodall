@@ -1,0 +1,28 @@
+<!-- Sticky Tab Navigation -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-slate-900/80 backdrop-blur-xl">
+  <div class="max-w-7xl mx-auto px-4 flex gap-1 py-2">
+
+    <button id="tab-booking"
+            (click)="setTab('booking')"
+            [class.bg-brand-600]="activeTab === 'booking'"
+            [class.text-white]="activeTab === 'booking'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                   text-white/50 hover:text-white hover:bg-white/10">
+      🚌 Book a Transfer
+    </button>
+
+    <button id="tab-admin"
+            (click)="setTab('admin')"
+            [class.bg-brand-600]="activeTab === 'admin'"
+            [class.text-white]="activeTab === 'admin'"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                   text-white/50 hover:text-white hover:bg-white/10">
+      📋 Admin Dashboard
+    </button>
+
+  </div>
+</nav>
+
+<!-- Tab Content -->
+<app-booking-form    *ngIf="activeTab === 'booking'"></app-booking-form>
+<app-admin-dashboard *ngIf="activeTab === 'admin'"></app-admin-dashboard>

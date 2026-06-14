@@ -1,0 +1,302 @@
+<div class="min-h-screen flex flex-col items-center justify-start px-4 py-8 sm:py-12">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
+  <div class="w-full max-w-lg text-center mb-8">
+    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-600/20 border border-brand-500/30 mb-4">
+      <!-- Bus / transport icon -->
+      <svg class="w-7 h-7 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M8 6h8M3 10h18M5 6V4a1 1 0 011-1h12a1 1 0 011 1v2M3 10v8a2 2 0 002 2h1m12 0h1a2 2 0 002-2v-8M7 20v1m10-1v1M7 15h.01M17 15h.01"/>
+      </svg>
+    </div>
+    <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+      Book Your Transfer
+    </h1>
+    <p class="text-white/50 mt-1.5 text-sm sm:text-base">
+      Fast, reliable tourist transportation — available 24/7
+    </p>
+  </div>
+
+  <!-- ── SUCCESS State ────────────────────────────────────────────────────── -->
+  <div *ngIf="submitState === 'success'"
+       class="w-full max-w-lg glass-card p-8 text-center animate-fade-in">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400/30 mb-5">
+      <svg class="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+      </svg>
+    </div>
+    <h2 class="text-xl font-bold text-white mb-2">Booking Received!</h2>
+    <p class="text-white/60 text-sm mb-6 leading-relaxed">
+      Your transfer request has been submitted. We'll contact you on WhatsApp shortly to confirm the details.
+    </p>
+    <button id="btn-new-booking" (click)="resetForm()"
+            class="btn-primary max-w-xs mx-auto block">
+      Make Another Booking
+    </button>
+  </div>
+
+  <!-- ── FORM ─────────────────────────────────────────────────────────────── -->
+  <form *ngIf="submitState !== 'success'"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        class="w-full max-w-lg glass-card p-5 sm:p-7 space-y-5">
+
+    <!-- ── 1. Full Name ──────────────────────────────────────────────────── -->
+    <div>
+      <label for="fullName" class="form-label">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 9a7 7 0 1114 0H3z"/>
+          </svg>
+          Full Name <span class="text-red-400">*</span>
+        </span>
+      </label>
+      <input id="fullName" type="text" formControlName="fullName"
+             class="form-input"
+             [class.border-red-500!]="hasError('fullName')"
+             placeholder="e.g. Maria García"
+             autocomplete="name"/>
+      <p *ngIf="hasError('fullName')" class="form-error">
+        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        {{ getError('fullName') }}
+      </p>
+    </div>
+
+    <!-- ── 2. WhatsApp Number ────────────────────────────────────────────── -->
+    <div>
+      <label for="whatsappNumber" class="form-label">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.554 4.11 1.523 5.836L0 24l6.336-1.51A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.373l-.36-.213-3.727.888.916-3.618-.234-.372A9.779 9.779 0 012.182 12C2.182 6.572 6.572 2.182 12 2.182S21.818 6.572 21.818 12 17.428 21.818 12 21.818z"/>
+          </svg>
+          WhatsApp Number <span class="text-red-400">*</span>
+        </span>
+      </label>
+      <input id="whatsappNumber" type="tel" formControlName="whatsappNumber"
+             class="form-input"
+             [class.border-red-500!]="hasError('whatsappNumber')"
+             placeholder="+1 234 567 8900"
+             autocomplete="tel"/>
+      <p class="text-white/40 text-xs mt-1">Include country code (e.g. +34, +1, +55)</p>
+      <p *ngIf="hasError('whatsappNumber')" class="form-error">
+        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        {{ getError('whatsappNumber') }}
+      </p>
+    </div>
+
+    <!-- ── 3. Arrival Date & Time ────────────────────────────────────────── -->
+    <div>
+      <label for="arrivalDateTime" class="form-label">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          Arrival Date &amp; Time <span class="text-red-400">*</span>
+        </span>
+      </label>
+      <input id="arrivalDateTime" type="datetime-local" formControlName="arrivalDateTime"
+             class="form-input [color-scheme:dark]"
+             [class.border-red-500!]="hasError('arrivalDateTime')"
+             [min]="minDateTime"/>
+      <p *ngIf="hasError('arrivalDateTime')" class="form-error">
+        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        {{ getError('arrivalDateTime') }}
+      </p>
+    </div>
+
+    <!-- ── 4. Pickup Location ────────────────────────────────────────────── -->
+    <div>
+      <label for="pickupLocation" class="form-label">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Pickup Location <span class="text-red-400">*</span>
+        </span>
+      </label>
+      <select id="pickupLocation" formControlName="pickupLocation"
+              class="form-input cursor-pointer"
+              [class.border-red-500!]="hasError('pickupLocation')">
+        <option value="" disabled selected class="bg-slate-800">— Select pickup point —</option>
+        <option *ngFor="let loc of pickupLocations" [value]="loc" class="bg-slate-800">
+          {{ loc }}
+        </option>
+      </select>
+      <p *ngIf="hasError('pickupLocation')" class="form-error">
+        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        {{ getError('pickupLocation') }}
+      </p>
+    </div>
+
+    <!-- ── 5. Drop-off Location ──────────────────────────────────────────── -->
+    <div>
+      <label for="dropoffLocation" class="form-label">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          Drop-off Location <span class="text-red-400">*</span>
+        </span>
+      </label>
+      <input id="dropoffLocation" type="text" formControlName="dropoffLocation"
+             class="form-input"
+             [class.border-red-500!]="hasError('dropoffLocation')"
+             placeholder="e.g. Hotel Sol, Calle Mayor 5"/>
+      <p *ngIf="hasError('dropoffLocation')" class="form-error">
+        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        {{ getError('dropoffLocation') }}
+      </p>
+    </div>
+
+    <!-- ── 6. Passengers & Luggage ───────────────────────────────────────── -->
+    <div class="section-divider">
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Passengers -->
+        <div>
+          <label for="passengers" class="form-label">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-brand-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+              </svg>
+              Passengers <span class="text-red-400">*</span>
+            </span>
+          </label>
+          <input id="passengers" type="number" formControlName="passengers"
+                 class="form-input text-center"
+                 [class.border-red-500!]="hasError('passengers')"
+                 min="1" max="50"/>
+          <p *ngIf="hasError('passengers')" class="form-error">
+            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            {{ getError('passengers') }}
+          </p>
+        </div>
+        <!-- Luggage -->
+        <div>
+          <label for="luggage" class="form-label">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+              Luggage <span class="text-red-400">*</span>
+            </span>
+          </label>
+          <input id="luggage" type="number" formControlName="luggage"
+                 class="form-input text-center"
+                 [class.border-red-500!]="hasError('luggage')"
+                 min="0" max="50"/>
+          <p *ngIf="hasError('luggage')" class="form-error">
+            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            {{ getError('luggage') }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 7. Return Trip Toggle ─────────────────────────────────────────── -->
+    <div class="section-divider">
+      <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-brand-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <div>
+            <p class="text-white font-medium text-sm">Return Trip Needed?</p>
+            <p class="text-white/40 text-xs">We'll arrange your way back too</p>
+          </div>
+        </div>
+        <!-- Toggle Switch -->
+        <label for="returnTrip" class="relative inline-flex items-center cursor-pointer">
+          <input id="returnTrip" type="checkbox" formControlName="returnTrip" class="sr-only peer"/>
+          <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer
+                      peer-checked:after:translate-x-full peer-checked:after:border-white
+                      after:content-[''] after:absolute after:top-0.5 after:left-[2px]
+                      after:bg-white after:border-white after:border after:rounded-full
+                      after:h-5 after:w-5 after:transition-all
+                      peer-checked:bg-brand-600 border border-white/20 transition-colors duration-200">
+          </div>
+        </label>
+      </div>
+
+      <!-- Return Date (conditional) -->
+      <div *ngIf="isReturnTrip" class="mt-4 animate-fade-in">
+        <label for="returnDateTime" class="form-label">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Return Date &amp; Time <span class="text-red-400">*</span>
+          </span>
+        </label>
+        <input id="returnDateTime" type="datetime-local" formControlName="returnDateTime"
+               class="form-input [color-scheme:dark]"
+               [class.border-red-500!]="hasError('returnDateTime')"
+               [min]="minDateTime"/>
+        <p *ngIf="hasError('returnDateTime')" class="form-error">
+          <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          {{ getError('returnDateTime') }}
+        </p>
+      </div>
+    </div>
+
+    <!-- ── Error Banner ──────────────────────────────────────────────────── -->
+    <div *ngIf="submitState === 'error'"
+         class="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+      <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <!-- ── Submit Button ─────────────────────────────────────────────────── -->
+    <div class="pt-2">
+      <button id="btn-submit-booking" type="submit"
+              [disabled]="isLoading"
+              class="btn-primary flex items-center justify-center gap-3">
+
+        <!-- Loading spinner -->
+        <svg *ngIf="isLoading"
+             class="animate-spin w-5 h-5 text-white/80"
+             fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+        </svg>
+
+        <svg *ngIf="!isLoading" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+        </svg>
+
+        {{ isLoading ? 'Submitting...' : 'Request My Transfer' }}
+      </button>
+
+      <p class="text-center text-white/30 text-xs mt-3">
+        🔒 Your information is encrypted and secure
+      </p>
+    </div>
+
+  </form>
+
+  <!-- ── Footer ───────────────────────────────────────────────────────────── -->
+  <p class="text-white/20 text-xs text-center mt-8">
+    © {{ currentYear }} Tourist Transfers · Available 24/7
+  </p>
+
+</div>
